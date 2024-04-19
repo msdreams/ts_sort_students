@@ -25,41 +25,26 @@ export function sortStudents(
 ):Student[] {
   const sortedSudents:Student[] = [...students];
 
-  if (order === 'asc') {
-    return sortedSudents.sort((a, b) => {
-      const sum = (total:number, current:number):number => total + current;
-
-      switch (sortBy) {
-        case 'name':
-        case 'surname':
-          return a[sortBy].localeCompare(b[sortBy]);
-        case 'age':
-          return a[sortBy] - b[sortBy];
-        case 'grades':
-          return a[sortBy].reduce(sum, 0) / a[sortBy].length
-            - b[sortBy].reduce(sum, 0) / b[sortBy].length;
-        case 'married':
-          return (a.married ? 1 : -1) - (b.married ? 1 : -1);
-        default:
-          return 0;
-      }
-    });
-  }
-
   return sortedSudents.sort((a, b) => {
     const sum = (total:number, current:number):number => total + current;
+    let studentA = a;
+    let studentB = b;
+
+    if (order === 'desc') {
+      studentA = b;
+      studentB = a;
+    }
 
     switch (sortBy) {
       case 'name':
       case 'surname':
-        return b[sortBy].localeCompare(a[sortBy]);
-      case 'age':
-        return b[sortBy] - a[sortBy];
-      case 'grades':
-        return b[sortBy].reduce(sum, 0) / b[sortBy].length
-          - a[sortBy].reduce(sum, 0) / a[sortBy].length;
+        return studentA[sortBy].localeCompare(studentB[sortBy]);
       case 'married':
-        return (b.married ? 1 : -1) - (a.married ? 1 : -1);
+      case 'age':
+        return +studentA[sortBy] - +studentB[sortBy];
+      case 'grades':
+        return studentA[sortBy].reduce(sum, 0) / studentA[sortBy].length
+          - studentB[sortBy].reduce(sum, 0) / studentB[sortBy].length;
       default:
         return 0;
     }
